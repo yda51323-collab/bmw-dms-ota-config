@@ -1,0 +1,35 @@
+# 宝马经销商管理系统 OTA 网关
+tenant:
+  brand: "宝马"
+  region: cn-east
+  env: prod
+
+gateway:
+  host: ota-gw.dms-bmw.internal
+  port: 8443
+  tls_min: "1.2"
+  server_name: ota-gw.dms-bmw.internal
+
+upstream:
+  package_store: https://pkg.dms-bmw.internal/ota
+  manifest: https://pkg.dms-bmw.internal/ota/manifest.json
+  cidr_allow:
+    - 203.0.113.0/24
+    - 198.51.100.128/25
+  timeout_s: 15
+
+gray:
+  enabled: true
+  weight: 15
+  group: dealer-tier-a
+  freeze_window: "22:00-06:00"
+
+rate_limit:
+  per_dealer: 8
+  global: 400
+  burst: 40
+
+rollback:
+  error_rate: 4.5
+  window_min: 30
+  min_samples: 200
